@@ -80,14 +80,14 @@ def move(route):
 
 def grab():
     global c
-    y = 0
+    y = -1
     if c == 1:
         print('Нельзя переносить больше одного ящика')
     else:
         for k in range(7):
             if T[k] == r:
                 y = k
-        if y == 0:
+        if y == -1:
             print('Эта пещера пуста')
         else:
             T[y] = 999
