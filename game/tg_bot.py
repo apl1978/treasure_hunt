@@ -1,4 +1,5 @@
-import sqlite3, random
+import sqlite3
+import random
 from datetime import datetime
 
 import telebot
@@ -20,6 +21,29 @@ HELP = '''
 <b>положить</b>: Положить сокровище
 <b>расположение</b>: Вывести текущее расположение сокровищ
 Каждая команда - это одно движение
+
+'''
+
+MAP = '''
+    С          _______________________________
+  З + В        | 2   темная и | 4 туманная и |
+    Ю          |   закопченая |   призрачная |
+      _________|              |              |
+      |          [Жевательная]   [Сендвичи]  |
+      |    ____  [  резинка  ]   [        ]  |
+______|   |____|_____    _____|_____    _____|
+| 1 холодная и | 7 наполненная| 4  грязная и |
+|       мокрая |      жуткими |      мрачная |
+|              | привидениями |              |
+|   [Золото]       [Монеты]       [Мусор]    |
+|   [      ]       [      ]       [     ]    |
+|_____    _____|_____    _____|_____    _____|  
+| 6 наполненная| 5     пустаяя|     |   |
+|      ужасными|    и страшная|     |   |        
+|    призраками|              |_____|   |
+| [Драгоценные]   [Горшки с]            |
+| [   камни   ]   [ медом  ]   _________|
+|______________|______________| 
 
 '''
 
@@ -127,6 +151,7 @@ def newgame(message):
     global m
     text = f'<b>Приветствую, {message.chat.first_name}.</b>\nДобро пожаловать в игру "Поиски сокровищ"!\n{HELP}'
     bot.send_message(message.chat.id, text, parse_mode='html', reply_markup=game_keyboard)
+    bot.send_photo(message.chat.id, open('map.gif', 'rb'))
 
     us_id = message.from_user.id
     us_name = str(message.from_user.first_name)
@@ -149,6 +174,8 @@ def get_text_messages(message):
     global m
     global c
 
+    if message.text == '/newgame':
+        return
     if message.text not in valid_commands:
         msg = bot.send_message(message.chat.id, 'Команда не распознана. Движение не засчитано.')
         bot.register_next_step_handler(msg, get_text_messages)
