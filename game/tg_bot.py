@@ -1,10 +1,17 @@
+""" Telegram bot "Treasure hunt" / Телеграм бот "Поиски сокровищ"
+The game is dedicated to the 1984 book "Practise your BASIC" by G. Waters and N.Cutler, which I have loved since
+childhood and thanks to which I became a programmer.
+Игра посвящена книге "Осваиваем микрокомпьютер" Г.Уотерс, Н.Катлер 1989г., которую я люблю с детства и благодаря которой
+я и стал программистом.
+autor apl1978 github.com/apl1978/"""
+
 import sqlite3
 import random
 from datetime import datetime
 
 import telebot
 from telebot import types
-from game.config import token
+from game.config import token, admin_id
 
 valid_commands = ['помощь', 'с', 'ю', 'з', 'в', 'поднять', 'положить', 'расположение']
 
@@ -96,7 +103,7 @@ game_keyboard.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
 
 
 def insert_new_user(user_id: int, user_name: str, user_surname: str, username: str, date_register: datetime):
-    cursor.execute(f'SELECT user_id FROM users WHERE user_id ={user_id}')
+    cursor.execute('SELECT user_id FROM users WHERE user_id =?', (user_id,))
     if cursor.fetchone() is None:
         cursor.execute(
             'INSERT INTO users (user_id, user_name, user_surname, username, date_register) VALUES (?, ?, ?, ?, ?)',
@@ -132,17 +139,28 @@ def start_command(message):
     bot.send_message(message.chat.id, text, parse_mode='html', reply_markup=main_keyboard)
 
 
+@bot.message_handler(commands=['printstat'])
+def printstat(message):
+    if message.chat.id == admin_id:
+        bot.send_message(message.chat.id, 'users')
+        cursor.execute('SELECT * FROM users')
+        result = cursor.fetchall()
+        for el in result:
+            text = " ".join(str(a) for a in el)
+            bot.send_message(message.chat.id, text)
+        bot.send_message(message.chat.id, 'results')
+        cursor.execute('SELECT * FROM results')
+        result = cursor.fetchall()
+        for el in result:
+            text = " ".join(str(a) for a in el)
+            bot.send_message(message.chat.id, text)
+
+
 @bot.message_handler(commands=['about'])
 def about(message):
-    text = 'О проекте. Написать разработчику. Придумать username в tg.'
+    text = 'Игра посвящена книге "Осваиваем микрокомпьютер" Г.Уотерс, Н.Катлер 1989г., которую я люблю с детства и' \
+           ' благодаря которой я и стал программистом. Написать разработчику: t.me/apl_1978.'
     bot.send_message(message.chat.id, text)
-    # keyboard = telebot.types.InlineKeyboardMarkup()
-    # keyboard.add(
-    #     telebot.types.InlineKeyboardButton(
-    #         'Написать разработчику', url='telegram.me/s_evg13'
-    #     )
-    # )
-    # bot.send_message(message.chat.id, HELP, reply_markup=keyboard)
 
 
 @bot.message_handler(commands=['newgame'])

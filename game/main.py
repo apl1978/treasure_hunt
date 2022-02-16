@@ -1,3 +1,12 @@
+""" A Treasure hunt game / Игра Поиски сокровищ
+The game is dedicated to the 1984 book "Practise your BASIC" by G. Waters and N.Cutler, which I have loved since
+childhood and thanks to which I became a programmer.
+The code is written as authentic as possible, so that it looks like BASIC from the book.
+Игра посвящена книге "Осваиваем микрокомпьютер" Г.Уотерс, Н.Катлер 1989г., которую я люблю с детства и благодаря которой
+я и стал программистом.
+Код написан максимально аутентично, так, чтобы было похоже на BASIC из книги.
+autor apl1978 github.com/apl1978/"""
+
 import random
 
 N = [2, 0, 0, 3, 7, 1, 2]
@@ -114,7 +123,6 @@ def locate():
     for k in range(7):
         if T[k] != 999:
             print(f'{T[k]} : {TS[k]}')
-
 
 if __name__ == '__main__':
     printhelp()
