@@ -3,7 +3,7 @@ Autor apl1978 github.com/apl1978/
 # A Treasure hunt game
 The game is dedicated to the 1984 book "Practise your BASIC" by G. Waters and N.Cutler, which I have loved since childhood and thanks to which I became a programmer.
 
-There are 2 files in the project:
+There are 3 files in the project:
 - main.py - fully working game code, launched in the console. Written as close as possible to the code from the book.
 - tg_bot.py - telegram bot with this game. The code is somewhat rewritten, but the meaning of the game remains the same.
 - main_python_style.py - code from main.py, rewritten in python style.
